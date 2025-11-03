@@ -42,7 +42,7 @@ vi /etc/exports
 mkdir -p /opt/nfs/pv{1..6}
 ```
 
-![2025-11-03 10.34.43](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.43.png)
+![2025-11-03 10.34.43](k8s-redis.assets/2025-11-03 10.34.43.png)
 
 3.更新配置并重启nfs服务
 
@@ -51,7 +51,7 @@ exportfs -r  #更新配置
 systemctl restart nfs-server
 ```
 
-![2025-11-03 10.34.58](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.58.png)
+![2025-11-03 10.34.58](k8s-redis.assets/2025-11-03 10.34.58.png)
 
 4.验证-------k8s集群
 
@@ -59,13 +59,13 @@ systemctl restart nfs-server
 yum -y install nfs-utils
 ```
 
-![2025-11-03 10.35.36](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.35.36.png)
+![2025-11-03 10.35.36](k8s-redis.assets/2025-11-03 10.35.36.png)
 
 ````
 showmount -e 192.168.13.235         
 ````
 
-![2025-11-03 10.35.47](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.35.47.png)
+![2025-11-03 10.35.47](k8s-redis.assets/2025-11-03 10.35.47.png)
 
 > 这里说一下，为什么要安装nfs？
 
@@ -88,7 +88,7 @@ metadata:          # 元数据，用于标识该资源
 provisioner: nfs-storage  # 存储插件的名称（需提前部署对应的 NFS 存储插件，如 nfs-subdir-external-provisioner），用于自动创建 PV
 ```
 
-![2025-11-03 10.36.00](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.00.png)
+![2025-11-03 10.36.00](k8s-redis.assets/2025-11-03 10.36.00.png)
 
 执行创建sc：
 
@@ -96,7 +96,7 @@ provisioner: nfs-storage  # 存储插件的名称（需提前部署对应的 NFS
 kubectl apply -f redis-sc.yaml
 ```
 
-![2025-11-03 10.36.06](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.06.png)
+![2025-11-03 10.36.06](k8s-redis.assets/2025-11-03 10.36.06.png)
 
 #### 2.2创建PV
 
@@ -200,7 +200,7 @@ spec:
     path: "/opt/nfs/pv6"  # 第六个共享目录
 ```
 
-![2025-11-03 10.36.14](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.14.png)
+![2025-11-03 10.36.14](k8s-redis.assets/2025-11-03 10.36.14.png)
 
 名称为`nfs-pv1`，对应的storageClassName为`redis-sc`，capacity容器200M，accessModes访问模式可被多节点读写
 
@@ -214,7 +214,7 @@ spec:
 kubectl apply -f redis-pv.yaml
 ```
 
-![2025-11-03 10.36.23](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.23.png)
+![2025-11-03 10.36.23](k8s-redis.assets/2025-11-03 10.36.23.png)
 
 通过kubectl查看：
 
@@ -223,7 +223,7 @@ kubectl get sc
 kubectl get pv
 ```
 
-![2025-11-03 10.36.31](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.31.png)
+![2025-11-03 10.36.31](k8s-redis.assets/2025-11-03 10.36.31.png)
 
 这里说一下，为什么要创建SC，PV？
 
@@ -247,7 +247,7 @@ kubectl get pv
 
 哈哈，说了，那么多，不知道，大家明不明白，不明白的可以继续往下看，或者自己部署实操一下，估计你就能明白，为啥要这么干了？
 
-![2025-11-03 10.36.40](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.40.png)
+![2025-11-03 10.36.40](k8s-redis.assets/2025-11-03 10.36.40.png)
 
 ### 三、redis集群搭建
 
@@ -280,7 +280,7 @@ spec:  # Service的核心配置规格，定义其工作方式
                    # 特点：不分配固定集群IP，通过Service名称直接解析到后端Pod的IP，适合StatefulSet（如Redis集群）场景
 ```
 
-![屏幕截图 2025-10-26 123708](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 123708.png)
+![2025-11-03 10.36.47](k8s-redis.assets/2025-11-03 10.36.47.png)
 
 在执行 `kubectl apply -f redis-hs.yaml` 前，先运行以下命令创建 `redis` 命名空间：
 
@@ -288,7 +288,7 @@ spec:  # Service的核心配置规格，定义其工作方式
 kubectl create namespace redis
 ````
 
-![屏幕截图 2025-10-26 123903](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 123903.png)
+![2025-11-03 10.36.55](k8s-redis.assets/2025-11-03 10.36.55.png)
 
 执行：
 
@@ -296,7 +296,7 @@ kubectl create namespace redis
 kubectl apply -f redis-hs.yaml
 ```
 
-![屏幕截图 2025-10-26 124008](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 124008.png)
+![2025-11-03 10.37.01](k8s-redis.assets/2025-11-03 10.37.01.png)
 
 网络访问：pod名称.headless名称.namespace名称.svc.cluster.local
 
@@ -435,7 +435,7 @@ spec:
         storageClassName: redis-sc  # 关联的存储类名称（需提前创建名为redis-sc的StorageClass），由存储类自动分配匹配的PV（如NFS类型PV）
 ```
 
-![屏幕截图 2025-10-26 125449](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 125449.png)
+![2025-11-03 10.37.08](k8s-redis.assets/2025-11-03 10.37.08.png)
 
 把/opt/redis/conf/redis.conf   发送每一个工作节点
 
@@ -444,7 +444,7 @@ scp /opt/redis/conf/redis.conf  node1:/opt/redis/conf
 scp /opt/redis/conf/redis.conf  node2:/opt/redis/conf
 ```
 
-![屏幕截图 2025-10-26 125806](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 125806.png)
+![2025-11-03 10.37.15](k8s-redis.assets/2025-11-03 10.37.15.png)
 
 执行：
 
@@ -452,7 +452,7 @@ scp /opt/redis/conf/redis.conf  node2:/opt/redis/conf
 kubectl apply -f redis.yaml
 ```
 
-![屏幕截图 2025-10-26 125034](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 125034.png)
+![2025-11-03 10.37.21](k8s-redis.assets/2025-11-03 10.37.21.png)
 
 由上操作，我们已经创建好redis的6个副本了。
 
@@ -462,13 +462,13 @@ kubectl apply -f redis.yaml
 kubectl  get pod -n redis -o wide
 ````
 
-![屏幕截图 2025-10-26 141953](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 141953.png)
+![2025-11-03 10.37.27](k8s-redis.assets/2025-11-03 10.37.27.png)
 
 ```
 kubectl get -n redis statefulset
 ```
 
-![屏幕截图 2025-10-26 140635](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 140635.png)
+![2025-11-03 10.37.33](k8s-redis.assets/2025-11-03 10.37.33.png)
 
 进入到redis-0容器
 
@@ -476,7 +476,7 @@ kubectl get -n redis statefulset
 kubectl exec -it redis-0  -n redis -- /bin/bash
 ````
 
-![屏幕截图 2025-10-26 130420](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 130420.png)
+![2025-11-03 10.37.40](k8s-redis.assets/2025-11-03 10.37.40.png)
 
 \# 创建master节点（redis-0、redis-2、redis-4）
 
@@ -484,7 +484,7 @@ kubectl exec -it redis-0  -n redis -- /bin/bash
 redis-cli --cluster create 10.244.2.196:6379 10.244.1.195:6379 10.244.1.196:6379 -a 123456
 ```
 
-![屏幕截图 2025-10-26 145421](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 145421.png)
+![2025-11-03 10.37.46](k8s-redis.assets/2025-11-03 10.37.46.png)
 
 注意上面的master节点，会生成对应节点id：86419287154c8552decfc9a1f95dd333b89373c2 27397d7dfbc1459b90db58f1d320f9de4fb36b98 
 713e9929357759de29ae8e62642c180f67ed2e3a ，用于创建slave节点。
@@ -495,7 +495,7 @@ redis-cli --cluster create 10.244.2.196:6379 10.244.1.195:6379 10.244.1.196:6379
 redis-cli -a 123456 cluster nodes
 ```
 
-![屏幕截图 2025-10-26 145503](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 145503.png)
+![2025-11-03 10.37.55](k8s-redis.assets/2025-11-03 10.37.55.png)
 
 ### 主节点 IP
 
@@ -515,7 +515,7 @@ redis-cli -a 123456 cluster nodes
 redis-cli --cluster add-node 10.244.1.194:6379 10.244.2.196:6379 --cluster-slave --cluster-master-id 3c8ec7f9af68710ab2b4f42b91dc66168ad6a19f -a 123456
 ```
 
-![屏幕截图 2025-10-26 150005](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150005.png)
+![2025-11-03 10.38.02](k8s-redis.assets/2025-11-03 10.38.02.png)
 
 #### 2. 将 `redis-3`（IP：10.244.2.197）设为 主 2（ID：dff358a1151c07d22da2ff43092e03cf6644bf85）的从节点
 
@@ -523,7 +523,7 @@ redis-cli --cluster add-node 10.244.1.194:6379 10.244.2.196:6379 --cluster-slave
 redis-cli --cluster add-node 10.244.2.197:6379 10.244.2.196:6379 --cluster-slave --cluster-master-id dff358a1151c07d22da2ff43092e03cf6644bf85 -a 123456
 ```
 
-![屏幕截图 2025-10-26 150113](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150113.png)
+![2025-11-03 10.38.09](k8s-redis.assets/2025-11-03 10.38.09.png)
 
 #### 3. 将 `redis-5`（IP：10.244.2.198）设为 主 3（ID：95211356e7f4e41002f1f123ec9db2d9909fab40）的从节点
 
@@ -531,7 +531,7 @@ redis-cli --cluster add-node 10.244.2.197:6379 10.244.2.196:6379 --cluster-slave
 redis-cli --cluster add-node 10.244.2.198:6379 10.244.2.196:6379 --cluster-slave --cluster-master-id 95211356e7f4e41002f1f123ec9db2d9909fab40 -a 123456
 ```
 
-![屏幕截图 2025-10-26 150225](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150225.png)
+![2025-11-03 10.38.16](k8s-redis.assets/2025-11-03 10.38.16.png)
 
 显示以下信息，即为添加成功：
 
@@ -553,7 +553,7 @@ redis-cli --cluster add-node 10.244.2.198:6379 10.244.2.196:6379 --cluster-slave
 redis-cli -a 123456 cluster nodes
 ```
 
-![屏幕截图 2025-10-26 150312](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150312.png)
+![2025-11-03 10.38.23](k8s-redis.assets/2025-11-03 10.38.23.png)
 
 可以看到3个master，3个slave节点，都是`connected`状态。
 
@@ -563,7 +563,7 @@ redis-cli -a 123456 cluster nodes
 redis-cli -a 123456 cluster info
 ```
 
-![屏幕截图 2025-10-26 150335](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150335.png)
+![2025-11-03 10.38.28](k8s-redis.assets/2025-11-03 10.38.28.png)
 
 注意：
 
@@ -573,7 +573,7 @@ redis-cli -a 123456 cluster info
 redis-cli -c -a 123456 -h redis-0.redis-hs.redis -p 6379
 ```
 
-![屏幕截图 2025-10-26 135421](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 135421.png)
+![2025-11-03 10.38.34](k8s-redis.assets/2025-11-03 10.38.34.png)
 
 - get，set验证
 
@@ -604,7 +604,7 @@ root@redis-1:/data# redis-cli -c -a 123456
 "1"
 ```
 
-![屏幕截图 2025-10-26 150927](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 150927.png)
+![2025-11-03 10.38.40](k8s-redis.assets/2025-11-03 10.38.40.png)
 
 master节点进行set操作，slave节点复制。`主从复制`
 
@@ -616,7 +616,7 @@ redis-2未重启之前
 cluster nodes
 ```
 
-![屏幕截图 2025-10-26 151152](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 151152.png)
+![2025-11-03 10.38.46](k8s-redis.assets/2025-11-03 10.38.46.png)
 
 重启redis-2
 
@@ -624,7 +624,7 @@ cluster nodes
 kubectl delete pod redis-2 -n redis
 ```
 
-![屏幕截图 2025-10-26 151332](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 151332.png)
+![2025-11-03 10.38.51](k8s-redis.assets/2025-11-03 10.38.51.png)
 
 redis-2重启之后
 
@@ -634,7 +634,7 @@ root@redis-0:/data# redis-cli -c -a 123456
 127.0.0.1:6379> cluster nodes
 ````
 
-![屏幕截图 2025-10-26 151455](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 151455.png)
+![2025-11-03 10.38.57](k8s-redis.assets/2025-11-03 10.38.57.png)
 
 可以看到重启后的，redis-1节点，虽然ip变了，但是redis集群，还是可以识别到新的ip，集群还是正常的。
 
@@ -688,7 +688,7 @@ spec:
 kubectl apply -f redis-ss.yaml 
 ```
 
-![屏幕截图 2025-10-26 152359](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 152359.png)
+![2025-11-03 10.39.02](k8s-redis.assets/2025-11-03 10.39.02.png)
 
 创建名称为：`redis-ss`的服务。
 
@@ -700,9 +700,7 @@ kubectl apply -f redis-ss.yaml
 kubectl get service -n redis
 ````
 
-![屏幕截图 2025-10-26 152633](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 152633.png)
-
-
+![2025-11-03 10.39.07](k8s-redis.assets/2025-11-03 10.39.07.png)
 
 **安装客户端**
 
@@ -710,13 +708,13 @@ kubectl get service -n redis
 yum install -y redis 
 ```
 
-![屏幕截图 2025-10-26 152848](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 152848.png)
+![2025-11-03 10.39.12](k8s-redis.assets/2025-11-03 10.39.12.png)
 
 ```
 kubectl get pod -o wide -n redis
 ```
 
-![屏幕截图 2025-10-26 153623](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 153623.png)
+![2025-11-03 10.39.18](k8s-redis.assets/2025-11-03 10.39.18.png)
 
 ```
 redis-cli -h 192.168.13.248 -p 30379 -a 123456 -c
@@ -724,7 +722,7 @@ info replication
  get name
 ```
 
-![屏幕截图 2025-10-26 153414](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 153414.png)
+![2025-11-03 10.39.23](k8s-redis.assets/2025-11-03 10.39.23.png)
 
 ```
 redis-cli -h 192.168.13.249 -p 30379 -a 123456 -c
@@ -732,7 +730,7 @@ info replication
 set hell word
 ```
 
-![屏幕截图 2025-10-26 153506](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 153506.png)
+![2025-11-03 10.39.29](k8s-redis.assets/2025-11-03 10.39.29.png)
 
 ### 1.6相关疑问分析
 
@@ -742,7 +740,7 @@ set hell word
 cat /opt/nfs/pv1/nodes.conf
 ```
 
-![屏幕截图 2025-10-26 154009](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 154009.png)
+![2025-11-03 10.39.34](k8s-redis.assets/2025-11-03 10.39.34.png)
 
 如上，第一列为NodeId，稳定不变；第二列为IP和端口信息，可能会改变。
 
