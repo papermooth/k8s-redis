@@ -20,7 +20,7 @@
 hostname -I | awk '{print $1}'
 ```
 
-![屏幕截图 2025-10-26 121150](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 121150.png)
+![2025-11-03 10.34.18](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.18.png)
 
 1.配置（需要共享的文件夹）
 
@@ -34,7 +34,7 @@ vi /etc/exports
 /opt/nfs/pv6 *(rw,sync,no_subtree_check,no_root_squash)
 ```
 
-![屏幕截图 2025-10-26 120302](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 120302.png)
+![2025-11-03 10.34.35](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.35.png)
 
 2.创建文件夹
 
@@ -42,7 +42,7 @@ vi /etc/exports
 mkdir -p /opt/nfs/pv{1..6}
 ```
 
-![屏幕截图 2025-10-26 120746](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 120746.png)
+![2025-11-03 10.34.43](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.43.png)
 
 3.更新配置并重启nfs服务
 
@@ -51,7 +51,7 @@ exportfs -r  #更新配置
 systemctl restart nfs-server
 ```
 
-![屏幕截图 2025-10-26 120826](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 120826.png)
+![2025-11-03 10.34.58](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.58.png)
 
 4.验证-------k8s集群
 
@@ -59,13 +59,13 @@ systemctl restart nfs-server
 yum -y install nfs-utils
 ```
 
-![屏幕截图 2025-10-26 121509](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 121509.png)
+![2025-11-03 10.35.36](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.35.36.png)
 
 ````
 showmount -e 192.168.13.235         
 ````
 
-![屏幕截图 2025-10-26 121333](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 121333.png)
+![2025-11-03 10.35.47](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.35.47.png)
 
 > 这里说一下，为什么要安装nfs？
 
@@ -88,7 +88,7 @@ metadata:          # 元数据，用于标识该资源
 provisioner: nfs-storage  # 存储插件的名称（需提前部署对应的 NFS 存储插件，如 nfs-subdir-external-provisioner），用于自动创建 PV
 ```
 
-![屏幕截图 2025-10-26 121804](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 121804.png)
+![2025-11-03 10.36.00](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.00.png)
 
 执行创建sc：
 
@@ -96,7 +96,7 @@ provisioner: nfs-storage  # 存储插件的名称（需提前部署对应的 NFS
 kubectl apply -f redis-sc.yaml
 ```
 
-![屏幕截图 2025-10-26 122957](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 122957.png)
+![2025-11-03 10.36.06](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.06.png)
 
 #### 2.2创建PV
 
@@ -200,7 +200,7 @@ spec:
     path: "/opt/nfs/pv6"  # 第六个共享目录
 ```
 
-![屏幕截图 2025-10-26 122413](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 122413.png)
+![2025-11-03 10.36.14](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.14.png)
 
 名称为`nfs-pv1`，对应的storageClassName为`redis-sc`，capacity容器200M，accessModes访问模式可被多节点读写
 
@@ -214,7 +214,7 @@ spec:
 kubectl apply -f redis-pv.yaml
 ```
 
-![屏幕截图 2025-10-26 122803](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 122803.png)
+![2025-11-03 10.36.23](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.23.png)
 
 通过kubectl查看：
 
@@ -223,7 +223,7 @@ kubectl get sc
 kubectl get pv
 ```
 
-![屏幕截图 2025-10-26 123030](/Users/bufferhhh/Documents/redis/屏幕截图 2025-10-26 123030.png)
+![2025-11-03 10.36.31](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.31.png)
 
 这里说一下，为什么要创建SC，PV？
 
@@ -247,7 +247,7 @@ kubectl get pv
 
 哈哈，说了，那么多，不知道，大家明不明白，不明白的可以继续往下看，或者自己部署实操一下，估计你就能明白，为啥要这么干了？
 
-![1](/Users/bufferhhh/Documents/redis/1.webp)
+![2025-11-03 10.36.40](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.36.40.png)
 
 ### 三、redis集群搭建
 
