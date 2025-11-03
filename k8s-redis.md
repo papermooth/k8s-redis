@@ -20,7 +20,7 @@
 hostname -I | awk '{print $1}'
 ```
 
-![2025-11-03 10.34.18](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.18.png)
+![2025-11-03 10.34.18](k8s-redis.assets/2025-11-03 10.34.18.png)
 
 1.配置（需要共享的文件夹）
 
@@ -34,7 +34,7 @@ vi /etc/exports
 /opt/nfs/pv6 *(rw,sync,no_subtree_check,no_root_squash)
 ```
 
-![2025-11-03 10.34.35](/Users/bufferhhh/Documents/k8s-redis/k8s-redis.assets/2025-11-03 10.34.35.png)
+![2025-11-03 10.34.35](k8s-redis.assets/2025-11-03 10.34.35.png)
 
 2.创建文件夹
 
