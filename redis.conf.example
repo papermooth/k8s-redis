@@ -1,0 +1,65 @@
+# Redis配置文件示例 - 适用于K8s集群模式部署
+
+# 基础配置
+port 6379                      # Redis服务端口
+pidfile /var/run/redis_6379.pid # PID文件位置
+dir /data                      # 数据目录，对应挂载的PVC
+
+# 内存管理
+maxmemory 1gb                  # 最大内存限制
+maxmemory-policy allkeys-lru   # 内存不足时的淘汰策略
+
+# 网络配置
+bind 0.0.0.0                   # 监听所有网络接口
+protected-mode no              # 关闭保护模式，允许远程访问
+
+# 安全配置
+requirepass 123456             # Redis密码，生产环境请使用强密码
+masterauth 123456              # 主从复制认证密码
+
+# 持久化配置
+enable-aof yes                 # 启用AOF持久化
+appendonly yes                 # 开启AOF持久化
+appendfsync everysec           # AOF同步策略，每秒同步一次
+
+# 集群配置 - 必须启用
+cluster-enabled yes            # 启用集群模式
+cluster-config-file nodes.conf # 集群配置文件，会自动创建和更新
+cluster-node-timeout 5000      # 集群节点超时时间（毫秒）
+cluster-announce-port 6379     # 集群节点对外声明的端口
+cluster-announce-bus-port 16379 # 集群总线端口，用于节点间通信
+
+# 性能优化
+tcp-backlog 511                # TCP连接队列长度
+tcp-keepalive 300              # TCP保持连接时间（秒）
+timeout 0                      # 客户端空闲超时时间，0表示不超时
+
+# 日志配置
+loglevel notice                # 日志级别：debug、verbose、notice、warning
+logfile ""                     # 日志文件，空字符串表示输出到标准输出
+
+# 慢查询日志
+slowlog-log-slower-than 10000  # 记录超过此时间的命令（微秒）
+slowlog-max-len 128            # 慢查询日志最大条目数
+
+# 高级配置
+hz 10                          # Redis执行后台任务的频率
+activerehashing yes            # 启用主动重新哈希表
+
+# 客户端配置
+maxclients 10000               # 最大客户端连接数
+
+# 主从复制配置
+repl-disable-tcp-nodelay no    # 禁用TCP_NODELAY，提高主从复制速度
+repl-backlog-size 50mb         # 复制积压缓冲区大小
+
+# 故障转移配置
+auto-aof-rewrite-percentage 100 # AOF文件大小增长百分比触发重写
+auto-aof-rewrite-min-size 64mb  # AOF文件最小重写大小
+
+# 注意事项：
+# 1. 此配置适用于Kubernetes环境中的Redis集群节点
+# 2. 密码设置为123456，生产环境请修改为强密码
+# 3. 端口6379用于客户端连接，16379用于集群节点间通信
+# 4. 请确保在所有Kubernetes节点上使用相同的配置文件
+# 5. 在部署前，将此文件复制到/opt/redis/conf/redis.conf路径下
